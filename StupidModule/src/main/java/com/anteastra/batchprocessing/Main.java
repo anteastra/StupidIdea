@@ -10,7 +10,7 @@ import java.util.*;
  */
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
 
         List<Entity> list = new ArrayList<Entity>();
         createObjects(8, list);
@@ -23,12 +23,11 @@ public class Main {
         for (Entity e: list) {
             processor.addToBatchProcess(e);
         }
+        processor.shutDown();
 
         System.out.println("---------");
         System.out.println("Total result:");
         System.out.println(list);
-
-//        processObjects();
     }
 
     private static void createObjects(int count, List<Entity> list) {

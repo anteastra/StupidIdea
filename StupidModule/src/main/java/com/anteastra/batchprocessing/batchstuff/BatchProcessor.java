@@ -5,11 +5,18 @@ import com.anteastra.batchprocessing.entity.Entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by anteastra on 09.03.2017.
  */
 public class BatchProcessor {
+
+    private static int WAIT_TERMIINATION_SEC = 15;
+
+    private ExecutorService service = Executors.newFixedThreadPool(3);
 
     private int batchNumber = 1;
 
@@ -24,23 +31,15 @@ public class BatchProcessor {
     }
 
     private void processBatch() {
-
-        System.out.println("Batch " + batchNumber + " processing:");
-        System.out.println(entities);
-        processExternal(entities);
-        System.out.println("Batch result:");
-        System.out.println(entities);
-        System.out.println("---------");
+        TaskToExecute task = new TaskToExecute(entities, batchNumber);
+        service.submit(task);
         batchNumber++;
         entities.clear();
     }
 
-    private void processExternal(List<Entity> entities) {
-        RandomString rs = new RandomString(5, "batch-" + batchNumber + "-", "");
-
-        for (Entity e: entities) {
-            e.justName = rs.nextString();
-        }
+    public void shutDown() throws InterruptedException {
+        service.shutdown();
+        service.awaitTermination(WAIT_TERMIINATION_SEC, TimeUnit.SECONDS);
     }
 
 }

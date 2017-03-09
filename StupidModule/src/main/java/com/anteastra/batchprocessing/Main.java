@@ -23,6 +23,9 @@ public class Main {
         for (Entity e: list) {
             processor.addToBatchProcess(e);
         }
+
+        Thread.sleep(5000);
+
         processor.shutDown();
 
         System.out.println("---------");

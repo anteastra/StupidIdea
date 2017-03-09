@@ -14,13 +14,15 @@ public class TaskToExecute implements Callable<Void> {
 
     private List<Entity> entities;
     private int number;
+    private String initStr;
 
-    public TaskToExecute(List<Entity> entities, int number) {
+    public TaskToExecute(List<Entity> entities, int number, String initStr) {
         this.entities = new ArrayList<>();
         for (Entity e: entities) {
             this.entities.add(e);
         }
         this.number = number;
+        this.initStr = initStr;
     }
 
     @Override
@@ -39,7 +41,7 @@ public class TaskToExecute implements Callable<Void> {
 
 
     private void processExternal(List<Entity> entities) {
-        RandomString rs = new RandomString(5, "batch-" + number + "-", "");
+        RandomString rs = new RandomString(5, initStr +"-" + number + "-", "");
 
         for (Entity e: entities) {
             e.justName = rs.nextString();
